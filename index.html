@@ -161,7 +161,7 @@
         <li><a href="news.html">お知らせ</a></li>
         <li><a href="summry.html">概要</a></li>
         <li><a href="index.html">ホーム</a></li>
-        <li><a href="great joy.html">日記</a></li>
+        <li><a href="great　joy.html">日記</a></li>
       </ul>
     </nav>
   </header>
@@ -201,10 +201,6 @@
 
     setInterval(updateClock, 1000);
 
-    function showChatScreen(groupName) {
-      window.location.href = "chatpage.html?group=" + encodeURIComponent(groupName);
-    }
-
     var groups = [];
 
     function displayAvailableGroups() {
@@ -229,7 +225,11 @@
       if (groupName !== "") {
         groups.push(groupName);
         groupNameInput.value = "";
+        if (groups.length > maxGroupCount) {
+          groups.shift();
+        }
         displayAvailableGroups();
+        saveGroupsToLocalStorage();
       }
     }
 
@@ -243,28 +243,27 @@
       }
     }
 
-    displayAvailableGroups();
-    var maxGroupCount = 100;
-
-function createGroup() {
-  var groupNameInput = document.getElementById("groupNameInput");
-  var groupName = groupNameInput.value;
-
-  if (groupName !== "") {
-    groups.push(groupName);
-    groupNameInput.value = "";
-    if (groups.length > maxGroupCount) {
-      groups.shift();
+    function saveGroupsToLocalStorage() {
+      localStorage.setItem("groups", JSON.stringify(groups));
     }
+
+    function loadGroupsFromLocalStorage() {
+      var savedGroups = localStorage.getItem("groups");
+
+      if (savedGroups) {
+        groups = JSON.parse(savedGroups);
+        displayAvailableGroups();
+      }
+    }
+
+    function showChatScreen(groupName) {
+      window.location.href = "chatpage.html?group=" + encodeURIComponent(groupName);
+    }
+
     displayAvailableGroups();
-  }
-}
+    loadGroupsFromLocalStorage();
+    
+    var maxGroupCount = 100;
   </script>
 </body>
 </html>
-
-   
-   
-
-   
-  
